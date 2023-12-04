@@ -1,0 +1,23 @@
+.chart{
+  display:block;
+  width: 500px;
+  height: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.field-lottery-digit {
+  width: 400px;
+}
+.field-select-player {
+  width: 500px;
+}
+.panel-content {
+  display: flex; /* จัดเรียงองค์ปุ่มในแนวนอน */
+  gap: 5rem; /* ระยะห่างระหว่างปุ่ม 5 เซนติเมตร */
+  justify-content: center; /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
+  padding-top: 5%;
+}
+.button-register {
+  width: 100px;
+  height: 50px;
+}
