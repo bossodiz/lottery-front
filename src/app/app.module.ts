@@ -41,7 +41,7 @@ Chart.register(...registerables)
     FormsModule,
     MatFormFieldModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -12,12 +12,15 @@
   width: 500px;
 }
 .panel-content {
-  display: flex; /* จัดเรียงองค์ปุ่มในแนวนอน */
-  gap: 5rem; /* ระยะห่างระหว่างปุ่ม 5 เซนติเมตร */
-  justify-content: center; /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
+  display: flex;
+  gap: 5rem;
+  justify-content: center;
   padding-top: 5%;
 }
 .button-register {
   width: 100px;
   height: 50px;
 }
+
+
+
