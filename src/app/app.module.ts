@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { StopwatchComponent } from './stopwatch/stopwatch.component';
+import { CountDownTimerComponent } from './countdowntimer/countdowntimer.component';
 import { LotteryComponent } from './lottery/lottery.component';
 import { RewardComponent } from './reward/reward.component';
 import { Chart } from 'chart.js'
@@ -27,9 +27,9 @@ Chart.register(...registerables)
     AppComponent,
     NavbarComponent,
     DashboardComponent,
-    StopwatchComponent,
     LotteryComponent,
-    RewardComponent
+    RewardComponent,
+    CountDownTimerComponent
   ],
   imports: [
     BrowserModule,

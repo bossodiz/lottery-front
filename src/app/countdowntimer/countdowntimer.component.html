@@ -1,0 +1,34 @@
+<div class="countdown-container">
+
+  <div class="countdown-circle" [ngClass]="{'final-countdown': isCounting && remainingSeconds <= 10}">
+    <p *ngIf="showTime" class="countdown-text">{{ getRemainingTime() }}</p>
+  </div>
+
+  <div class="panel-content">
+    <mat-form-field class="field-timer">
+      <mat-label>Minutes (0-9) </mat-label>
+      <input matInput type="text" [(ngModel)]="minutes" maxlength="1" (keypress)="onlyNumberKey($event)">
+      @if (minutes) {
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="minutes = 0">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="field-timer">
+      <mat-label>Seconds (0-99)</mat-label>
+      <input matInput type="text" [(ngModel)]="seconds" maxlength="2" (keypress)="onlyNumberKey($event)">
+      @if (seconds) {
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="seconds = 0">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="panel-content">
+    <button mat-raised-button class="button-timer" (click)="toggleCountdown()" >{{ isCounting ? 'Stop' : 'Start' }}</button>
+    <button mat-raised-button class="button-timer" (click)="resetCountdown()">Reset</button>
+  </div>
+
+</div>
