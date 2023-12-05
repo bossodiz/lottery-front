@@ -13,16 +13,12 @@ import { Observable, map, startWith } from 'rxjs';
 
 export class DashboardComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar) { }
-  selectedValue: string = '';
-  lotteryDigit = '';
   name = '';
   ctx: any;
   config: any;
   chartData: number[] = [];
   chartDatalabels: any[] = [];
-  checkLength: boolean = false;
-  successMessage = '';
-  showSuccess = false;
+  alertMessage = '';
 
   backgroundColors = [
     'rgb(255, 0, 0)',
@@ -136,31 +132,45 @@ export class DashboardComponent implements OnInit {
     return true;
   }
 
+  // disableBtnRegisLot() {
+  //   let validateLottery = this.registerLoterry.lottery.length < 6
+  //   let validatePlayer = () => {
+  //     this.registerLoterry.player.length < 1
+  //     console.log(validateLottery || validatePlayer)
+  //     return validateLottery || validatePlayer;
+  //   }
+  // }
   disableBtnRegisLot() {
     let validateLottery = this.registerLoterry.lottery.length < 6
-    let validatePlayer = () => {
-      this.registerLoterry.player.length < 1
-      console.log(validateLottery || validatePlayer)
-      return validateLottery || validatePlayer;
+    let validatePlayer =  this.registerLoterry.player.length < 1
+    if (validateLottery || validatePlayer){
+      return true;
+    }
+    else{
+      return false;
     }
   }
   registerLotteryOnClick() {
-    console.log("length: " + this.lotteryDigit.length);
-
-    if (this.lotteryDigit.length < 6) {
-      this.successMessage = 'Please fill 6 digit before register';
+    console.log("length: " + this.registerLoterry.lottery.length);
+    console.log("length: " + this.registerLoterry.player);
+    if (!this.players.includes(this.registerLoterry.player)) {
+      this.alertMessage = 'This name does not exist in the system. Please register first.';
+      this.showAlert();
+    }
+    else if (this.registerLoterry.lottery.length < 6) {
+      this.alertMessage = 'Please fill 6 digit before register';
       this.showAlert();
     }
     else {
-      this.successMessage = 'Register lottery for ' + this.selectedValue + ' number ' + this.lotteryDigit + ' is successful!';
+      this.alertMessage = 'Register lottery for ' + this.registerLoterry.player + ' number ' + this.registerLoterry.lottery + ' is successful!';
       this.showAlert();
-      this.lotteryDigit = '';
-      this.selectedValue = '';
+      this.registerLoterry.lottery = '';
+      this.registerLoterry.player = '';
     }
 
   }
   registerPlayerOnClick() {
-    this.successMessage = 'Register Player ' + this.name + ' is successful!';
+    this.alertMessage = 'Register Player ' + this.name + ' is successful!';
     this.showAlert();
   }
   showAlert() {
@@ -168,7 +178,7 @@ export class DashboardComponent implements OnInit {
     config.duration = 3000;
     config.horizontalPosition = 'center';
     config.verticalPosition = 'bottom';
-    const alertBar = this._snackBar.open(this.successMessage, 'Close', config);
+    const alertBar = this._snackBar.open(this.alertMessage, 'Close', config);
     alertBar.onAction().subscribe(() => {
       alertBar.dismiss();
     });
