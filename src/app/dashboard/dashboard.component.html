@@ -3,49 +3,42 @@
 <div class="chart">
   <canvas id="myChart"></canvas>
 </div>
-<div style="padding-top: 1%; padding-left: 45.3%; font-size: large">
+<div style="padding-top: 1em; text-align: center; font-size: large">
   <span>Lottery Left: 66</span>
 </div>
 <div class="panel-content">
-<mat-form-field class="field-lottery-digit">
-  <mat-label>register lottery 6 digit</mat-label>
-  <input matInput type="text" [(ngModel)]="lotteryDigit" maxlength="6" (keypress)="onlyNumberKey($event)">
-  @if (lotteryDigit) {
+  <mat-form-field class="field-lottery-digit">
+    <mat-label>register lottery 6 digit</mat-label>
+    <input matInput type="text" [(ngModel)]="lotteryDigit" maxlength="6" (keypress)="onlyNumberKey($event)">
+    @if (lotteryDigit) {
     <button matSuffix mat-icon-button aria-label="Clear" (click)="lotteryDigit=''">
       <mat-icon>close</mat-icon>
     </button>
-  }
-</mat-form-field>
-<mat-form-field class="field-select-player">
-  <mat-label>Select Player</mat-label>
-  <mat-select [(ngModel)]="selectedValue">
-    <mat-option value="Best">Best</mat-option>
-    <mat-option value="P'Boss">P'Boss</mat-option>
-    <mat-option value="Dad">Dad</mat-option>
-    <mat-option value="Mom">Mom</mat-option>
+    }
+  </mat-form-field>
+  <mat-form-field class="field-select-player">
+    <mat-label>Select Player</mat-label>
+    <mat-select [(ngModel)]="selectedValue">
+      <mat-option value="Best">Best</mat-option>
+      <mat-option value="P'Boss">P'Boss</mat-option>
+      <mat-option value="Dad">Dad</mat-option>
+      <mat-option value="Mom">Mom</mat-option>
 
-  </mat-select>
-</mat-form-field >
-  <button id="buttonRegister" mat-raised-button class="button-register" [disabled]="!checkLength || !selectedValue || !lotteryDigit" (click)="registerLottery()">Register Lottery</button>
+    </mat-select>
+  </mat-form-field>
+  <button id="buttonRegister" mat-raised-button class="button-register"
+    [disabled]="!checkLength || !selectedValue || !lotteryDigit" (click)="registerLottery()">Register Lottery</button>
 </div>
 <div class="panel-content">
   <mat-form-field class="field-lottery-digit">
     <mat-label>register name</mat-label>
-    <input matInput type="text" [(ngModel)]="name" maxlength="10" >
+    <input matInput type="text" [(ngModel)]="name" maxlength="10">
     @if (name) {
-      <button matSuffix mat-icon-button aria-label="Clear" (click)="name=''">
-        <mat-icon>close</mat-icon>
-      </button>
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="name=''">
+      <mat-icon>close</mat-icon>
+    </button>
     }
   </mat-form-field>
-  <button mat-raised-button class="button-register" [disabled]="!name " (click)="registerPlayer()">Register Player</button>
+  <button mat-raised-button class="button-register" [disabled]="!name " (click)="registerPlayer()">Register
+    Player</button>
 </div>
-
-
-
-
-
-
-
-
-
