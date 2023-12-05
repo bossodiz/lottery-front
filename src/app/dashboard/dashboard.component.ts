@@ -1,6 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { Observable, map, startWith } from 'rxjs';
 
 
 @Component({
@@ -9,7 +11,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
   styleUrl: './dashboard.component.css'
 })
 
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar) { }
   selectedValue: string = '';
   lotteryDigit = '';
@@ -50,18 +52,37 @@ export class DashboardComponent {
       id: 1, name: 'boss', value: 10
     },
     {
-      id: 2, name: 'best', value: 10
+      id: 2, name: 'best', value: 9
     },
     {
-      id: 3, name: 'jame', value: 10
+      id: 3, name: 'jame', value: 8
     },
     {
-      id: 4, name: 'jatt', value: 10
+      id: 4, name: 'jatt', value: 7
     },
     {
-      id: 5, name: 'jj', value: 10
+      id: 5, name: 'jj', value: 6
     },
   ];
+
+  playerList = [
+    { id: 1, name: 'boss' },
+    { id: 2, name: 'best' },
+    { id: 3, name: 'jame' },
+    { id: 4, name: 'jatt' },
+    { id: 5, name: 'jj' },
+  ]
+  myControl = new FormControl('');
+  players: string[] = ['One', 'Two', 'Three', '44522', '44523', '6442', '7442'];
+  filteredOptions: Observable<string[]> | undefined;
+
+  validateRegisterLottery = true;
+
+  registerLoterry = {
+    lottery: '',
+    player: '',
+  }
+
 
   ngOnInit() {
     this.ctx = document.getElementById('myChart');
@@ -95,18 +116,35 @@ export class DashboardComponent {
       }
     }
     const myChart = new Chart(this.ctx, this.config);
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.players.filter(player => player.toLowerCase().includes(filterValue));
+  }
+
+  onSelectionChange(event: any) {
+    console.log(event.option.value);
   }
 
   onlyNumberKey(event: KeyboardEvent) {
-    this.checkLength = this.lotteryDigit.length >= 5;
-    console.log(this.checkLength);
-    console.log(this.lotteryDigit.length);
-
     if (event.keyCode > 31 && (event.keyCode < 48 || event.keyCode > 57))
       return false;
     return true;
   }
-  registerLottery() {
+
+  disableBtnRegisLot() {
+    let validateLottery = this.registerLoterry.lottery.length < 6
+    let validatePlayer = () => {
+      this.registerLoterry.player.length < 1
+      console.log(validateLottery || validatePlayer)
+      return validateLottery || validatePlayer;
+    }
+  }
+  registerLotteryOnClick() {
     console.log("length: " + this.lotteryDigit.length);
 
     if (this.lotteryDigit.length < 6) {
@@ -121,7 +159,7 @@ export class DashboardComponent {
     }
 
   }
-  registerPlayer() {
+  registerPlayerOnClick() {
     this.successMessage = 'Register Player ' + this.name + ' is successful!';
     this.showAlert();
   }
@@ -139,3 +177,4 @@ export class DashboardComponent {
 
 
 }
+

@@ -6,10 +6,11 @@ import { LotteryComponent } from './lottery/lottery.component';
 import { RewardComponent } from './reward/reward.component';
 
 const routes: Routes = [
-  { path: "dashboard", component: DashboardComponent },
-  { path: "stopwatch", component: StopwatchComponent },
-  { path: "lottery", component: LotteryComponent },
-  { path: "reward", component: RewardComponent }
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'stopwatch', component: StopwatchComponent },
+  { path: 'lottery', component: LotteryComponent },
+  { path: 'reward', component: RewardComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

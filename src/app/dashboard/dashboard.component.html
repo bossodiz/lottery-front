@@ -1,33 +1,33 @@
-<h1>DashBoard</h1>
-
 <div class="chart">
   <canvas id="myChart"></canvas>
 </div>
 <div style="padding-top: 1em; text-align: center; font-size: large">
   <span>Lottery Left: 66</span>
 </div>
+{{ registerLoterry | json }}
 <div class="panel-content">
   <mat-form-field class="field-lottery-digit">
-    <mat-label>register lottery 6 digit</mat-label>
-    <input matInput type="text" [(ngModel)]="lotteryDigit" maxlength="6" (keypress)="onlyNumberKey($event)">
-    @if (lotteryDigit) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="lotteryDigit=''">
+    <mat-label>Lottery</mat-label>
+    <input matInput type="text" [(ngModel)]="registerLoterry.lottery" maxlength="6" (keypress)="onlyNumberKey($event)">
+    @if (registerLoterry.lottery) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="registerLoterry.lottery=''">
       <mat-icon>close</mat-icon>
     </button>
     }
   </mat-form-field>
   <mat-form-field class="field-select-player">
     <mat-label>Select Player</mat-label>
-    <mat-select [(ngModel)]="selectedValue">
-      <mat-option value="Best">Best</mat-option>
-      <mat-option value="P'Boss">P'Boss</mat-option>
-      <mat-option value="Dad">Dad</mat-option>
-      <mat-option value="Mom">Mom</mat-option>
-
-    </mat-select>
+    <input type="text" aria-label="Number" matInput [(ngModel)]="registerLoterry.player" [formControl]="myControl"
+      [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+      @for (option of filteredOptions | async; track option) {
+      <mat-option [value]="option">{{option}}</mat-option>
+      }
+    </mat-autocomplete>
   </mat-form-field>
-  <button id="buttonRegister" mat-raised-button class="button-register"
-    [disabled]="!checkLength || !selectedValue || !lotteryDigit" (click)="registerLottery()">Register Lottery</button>
+  <button id="buttonRegister" mat-raised-button class="button-register" [disabled]="disableBtnRegisLot()"
+    (click)="registerLotteryOnClick()">Register
+    Lottery</button>
 </div>
 <div class="panel-content">
   <mat-form-field class="field-lottery-digit">
@@ -39,6 +39,6 @@
     </button>
     }
   </mat-form-field>
-  <button mat-raised-button class="button-register" [disabled]="!name " (click)="registerPlayer()">Register
+  <button mat-raised-button class="button-register" [disabled]="!name " (click)="registerPlayerOnClick()">Register
     Player</button>
 </div>
