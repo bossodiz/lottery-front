@@ -13,6 +13,9 @@ export class CountDownTimerComponent implements OnDestroy {
   countdownSubscription: Subscription | undefined;
   isCounting: boolean = false;
   showTime: boolean = false;
+  audioLongTime = new Audio('../assets/180sec.mp3');
+  audio10Sec = new Audio('../assets/10sec.mp3');
+
 
   toggleCountdown() {
     if (this.isCounting) {
@@ -28,11 +31,13 @@ export class CountDownTimerComponent implements OnDestroy {
       this.remainingSeconds = this.minutes * 60 + this.seconds;
     }
 
+    this.audioLongTime.play();
     this.countdownSubscription = interval(1000).subscribe(() => {
       if (this.remainingSeconds > 0) {
         this.remainingSeconds--;
         this.showTime = true;
-      } else {
+      }
+      else {
         this.stopCountdown();
       }
     });
@@ -40,6 +45,7 @@ export class CountDownTimerComponent implements OnDestroy {
   }
 
   stopCountdown() {
+    this.audioLongTime.pause();
     if (this.countdownSubscription) {
       this.countdownSubscription.unsubscribe();
       this.isCounting = false;
@@ -59,6 +65,10 @@ export class CountDownTimerComponent implements OnDestroy {
   getRemainingTime() {
     if (this.remainingSeconds === 0) {
       return "Time's up";
+    }
+    else if(this.remainingSeconds === 10){
+      this.audioLongTime.pause();
+      this.audio10Sec.play();
     }
     return this.getFormattedTime();
   }
