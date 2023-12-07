@@ -7,7 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { CountDownTimerComponent } from './countdowntimer/countdowntimer.component';
+import { CountDownTimerComponent } from './count-down-timer/count-down-timer.component';
 import { LotteryComponent } from './lottery/lottery.component';
 import { RewardComponent } from './reward/reward.component';
 import { Chart } from 'chart.js'

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LotteryComponent } from './lottery/lottery.component';
 import { RewardComponent } from './reward/reward.component';
-import { CountDownTimerComponent } from './countdowntimer/countdowntimer.component';
+import { CountDownTimerComponent } from './count-down-timer/count-down-timer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

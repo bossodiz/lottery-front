@@ -1,9 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 @Component({
-  selector: 'app-countdowntimer',
-  templateUrl: './countdowntimer.component.html',
-  styleUrls: ['./countdowntimer.component.css']
+  selector: 'app-count-down-timer',
+  templateUrl: './count-down-timer.component.html',
+  styleUrls: ['./count-down-timer.component.css']
 })
 export class CountDownTimerComponent implements OnDestroy {
   minutes: number = 0;
@@ -18,24 +18,24 @@ export class CountDownTimerComponent implements OnDestroy {
 
   disableStartBtn() {
     let validateMinutes = this.minutes < 1;
-    let validateSecond =  this.seconds < 11;
-    if (this.remainingSeconds < 11 && this.remainingSeconds != 0){
+    let validateSecond = this.seconds < 11;
+    if (this.remainingSeconds < 11 && this.remainingSeconds != 0) {
       return true
     }
-    if (validateMinutes && validateSecond){
+    if (validateMinutes && validateSecond) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
 
-  disableInput(){
+  disableInput() {
     let timeIsCounting = this.remainingSeconds > 0;
-    if (timeIsCounting){
+    if (timeIsCounting) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
@@ -49,8 +49,8 @@ export class CountDownTimerComponent implements OnDestroy {
   }
 
   startCountdown() {
-    if (this.minutes === 0 && this.seconds === 0){
-      return ;
+    if (this.minutes === 0 && this.seconds === 0) {
+      return;
     }
     if (this.remainingSeconds === 0) {
       this.remainingSeconds = this.minutes * 60 + this.seconds;
@@ -94,7 +94,7 @@ export class CountDownTimerComponent implements OnDestroy {
     if (this.remainingSeconds === 0) {
       return "Time's up";
     }
-    else if(this.remainingSeconds < 11){
+    else if (this.remainingSeconds < 11) {
       this.audioLongTime.pause();
       this.audio10Sec.play();
       this.disableStartBtn();

@@ -132,21 +132,13 @@ export class DashboardComponent implements OnInit {
     return true;
   }
 
-  // disableBtnRegisLot() {
-  //   let validateLottery = this.registerLoterry.lottery.length < 6
-  //   let validatePlayer = () => {
-  //     this.registerLoterry.player.length < 1
-  //     console.log(validateLottery || validatePlayer)
-  //     return validateLottery || validatePlayer;
-  //   }
-  // }
   disableBtnRegisLot() {
     let validateLottery = this.registerLoterry.lottery.length < 6
-    let validatePlayer =  this.registerLoterry.player.length < 1
-    if (validateLottery || validatePlayer){
+    let validatePlayer = this.registerLoterry.player.length < 1
+    if (validateLottery || validatePlayer) {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
