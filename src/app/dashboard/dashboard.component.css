@@ -1,3 +1,10 @@
+.circle-left {
+  width: 25px;
+  height: 25px;
+  border-radius: 30%;
+  float: left;
+}
+
 .text-inside-grid-right {
   position: absolute;
   right: 1px;
@@ -34,6 +41,11 @@
   overflow-y: scroll;
 }
 
+.mat-mdc-list-item:hover {
+  background: rgb(237, 238, 238);
+  border-radius: 10%;
+}
+
 .panel-content {
   display: flex;
   gap: 5rem;
@@ -63,4 +75,14 @@
     transform: translateY(-1.25em) scale(0.75);
     width: 133.33333%;
   }
+}
+
+.left {
+  float: left;
+  text-align: left;
+}
+
+.right {
+  float: right;
+  text-align: right;
 }

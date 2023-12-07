@@ -23,10 +23,10 @@ export class DashboardService {
     });
   }
 
-  addLottery$(lottery: string, playerId: number) {
+  addLottery$(lottery: string, playerName: string) {
     return this.http.post<any>(`/dashboard/add-lottery`, {
       lottery: lottery,
-      playerId: playerId
+      playerName: playerName
     });
   }
 }

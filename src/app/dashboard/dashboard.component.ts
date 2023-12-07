@@ -17,36 +17,13 @@ export class DashboardComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar, private _service: DashboardService) { }
   name = '';
   ctx: any;
-  config: any;
   chartData: number[] = [];
   chartDatalabels: any[] = [];
   alertMessage = '';
 
-  backgroundColors = [
-    'rgb(255, 0, 0)',
-    'rgb(0, 255, 0)',
-    'rgb(0, 0, 255)',
-    'rgb(255, 255, 0)',
-    'rgb(255, 0, 255)',
-    'rgb(0, 255, 255)',
-    'rgb(128, 0, 0)',
-    'rgb(0, 128, 0)',
-    'rgb(0, 0, 128)',
-    'rgb(128, 128, 0)',
-    'rgb(128, 0, 128)',
-    'rgb(0, 128, 128)',
-    'rgb(128, 128, 128)',
-    'rgb(192, 192, 192)',
-    'rgb(255, 165, 0)',
-    'rgb(128, 0, 64)',
-    'rgb(0, 128, 64)',
-    'rgb(0, 64, 128)',
-    'rgb(64, 64, 64)',
-    'rgb(255, 192, 203)',
-  ];
+  myChart: any = [];
 
-  dataChart: any = [
-  ];
+  dataChart: any = [];
 
   playerList: any[] = []
   myControl = new FormControl('');
@@ -64,22 +41,34 @@ export class DashboardComponent implements OnInit {
     const responseChart = await lastValueFrom(this._service.getChart$());
     if (responseChart.code == 0) {
       this.dataChart = responseChart.data.lotteryPlayer;
-      this.lotteryLeft = responseChart.data.lotteryLeft
+      this.lotteryLeft = responseChart.data.lotteryLeft;
     }
   }
 
   async loadPlayers() {
     const responsePlayer = await lastValueFrom(this._service.getChart$());
     if (responsePlayer.code == 0) {
-      console.log(responsePlayer);
       this.playerList = responsePlayer.data.lotteryPlayer;
     }
   }
 
   async ngOnInit() {
-    this.loadChart();
-    this.loadPlayers();
-    const plugin = {
+    await this.loadChart();
+    await this.loadPlayers();
+
+    this.createChart();
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+  private _filter(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.playerList.filter(player => player.playerName.toLowerCase().includes(filterValue));
+  }
+
+  createChart() {
+    const plugin: any = {
       id: 'emptyDoughnut',
       afterDraw(chart: any, args: any, options: any) {
         const { datasets } = chart.data;
@@ -107,12 +96,65 @@ export class DashboardComponent implements OnInit {
         }
       }
     };
+    const alwaysShowTooltip = {
+      id: 'alwaysShowTooltip',
+      afterDraw(chart: any, args: any, options: any) {
+        const { ctx } = chart;
+        ctx.save();
+        chart.data.datasets.forEach((dataset: any, i: any) => {
+          chart.getDatasetMeta(i).data.forEach((datapoint: any, index: any) => {
+            if (dataset.data[index] > 0) {
+              const { x, y } = datapoint.tooltipPosition();
+              const text = chart.data.labels[index] + ': ' + chart.data.datasets[i].data[index];
+              const textWidth = ctx.measureText(text).width;
+              ctx.fillStyle = 'rgba(0,0,0,0.8)';
+              ctx.fillRect(x - ((textWidth + 10) / 2), y - 10, textWidth + 10, 20);
 
-    this.ctx = document.getElementById('myChart');
-    this.config = {
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.fill();
+              ctx.restore();
+
+              ctx.font = '20px Arial';
+              ctx.fillStyle = 'White';
+              ctx.fillText(text, x - (textWidth / 2), y + 9)
+              ctx.restore();
+            }
+          });
+        });
+      }
+    }
+
+    let config: any = {
       type: 'pie',
       options: {
+        layout: {
+          padding: {
+            top: 50,
+            bottom: 50
+          }
+        },
         plugins: {
+          tooltip: {
+            bodyFont: {
+              size: 25
+            },
+            callbacks: {
+              label: (context: any) => {
+                console.log(context);
+                let name = this.dataChart[context.dataIndex].playerName
+                return ' ' + name + ' : ' + context.raw + ' ';
+              }
+            }
+          },
+          legend: {
+            display: false,
+            labels: {
+              font: {
+                size: 30
+              }
+            }
+          },
           emptyDoughnut: {
             color: 'rgba(255, 128, 0, 0.5)',
             width: 2,
@@ -121,28 +163,20 @@ export class DashboardComponent implements OnInit {
         }
       },
       data: {
+        labels: this.dataChart.map((s: { playerName: any; }) => (s.playerName)),
         datasets: [{
-          label: 'Lottery Total',
+          label: 'Lottery ',
           data: this.dataChart.map((s: { total: any; }) => (s.total)),
           borderAlign: 'center',
           borderWidth: 2,
           borderColor: 'white',
-          backgroundColor: this.backgroundColors,
+          backgroundColor: this.dataChart.map((s: { color: any; }) => (s.color)),
         }],
 
       },
-      plugins: [plugin]
+      // plugins: [alwaysShowTooltip]
     }
-    const myChart = new Chart(this.ctx, this.config);
-
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-  }
-  private _filter(value: string): any[] {
-    const filterValue = value.toLowerCase();
-    return this.playerList.filter(player => player.playerName.toLowerCase().includes(filterValue));
+    this.myChart = new Chart('myChart', config);
   }
 
   onSelectionChange(event: any) {
@@ -175,12 +209,18 @@ export class DashboardComponent implements OnInit {
       return false;
     }
   }
-  registerLotteryOnClick() {
+  async registerLotteryOnClick() {
+    const response = await lastValueFrom(this._service.addLottery$(this.registerLoterry.lottery, this.registerLoterry.player));
+
     this.alertMessage = 'Register lottery for ' + this.registerLoterry.player + ' number ' + this.registerLoterry.lottery + ' is successful!';
     this.showAlert();
     this.registerLoterry.lottery = '';
     this.registerLoterry.player = '';
-
+    await this.loadChart();
+    await this.loadPlayers();
+    this.myChart.config.data.datasets[0].data = this.dataChart.map((s: { total: any; }) => (s.total));
+    this.myChart.config.data.datasets[0].backgroundColor = this.dataChart.map((s: { color: any; }) => (s.color)),
+      this.myChart.update();
   }
   async registerPlayerOnClick() {
     const responsePlayer = await lastValueFrom(this._service.addPlayer$(this.name));
