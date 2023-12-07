@@ -1,3 +1,13 @@
+.text-inside-grid-right {
+  position: absolute;
+  right: 1px;
+}
+
+.text-inside-grid-left {
+  position: absolute;
+  left: 3em;
+}
+
 .chart {
   display: block;
   width: 500px;
@@ -7,11 +17,21 @@
 }
 
 .field-lottery-digit {
-  /* width: 400px; */
+  width: 400px;
 }
 
 .field-select-player {
-  /* width: 500px; */
+  width: 400px;
+}
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+.list-player {
+  height: 230px;
+  overflow-y: scroll;
 }
 
 .panel-content {
@@ -22,7 +42,7 @@
 }
 
 .button-register {
-  width: 100px;
+  width: 150px;
   height: 50px;
 }
 

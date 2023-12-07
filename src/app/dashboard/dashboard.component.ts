@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
+import { DashboardService } from '../../service/dashboard.service';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { Observable, map, startWith } from 'rxjs';
 })
 
 export class DashboardComponent implements OnInit {
-  constructor(private _snackBar: MatSnackBar) { }
+  constructor(private _snackBar: MatSnackBar, private _service: DashboardService) { }
   name = '';
   ctx: any;
   config: any;
@@ -43,34 +45,12 @@ export class DashboardComponent implements OnInit {
     'rgb(255, 192, 203)',
   ];
 
-  dataChart = [
-    {
-      id: 1, name: 'boss', value: 10
-    },
-    {
-      id: 2, name: 'best', value: 9
-    },
-    {
-      id: 3, name: 'jame', value: 8
-    },
-    {
-      id: 4, name: 'jatt', value: 7
-    },
-    {
-      id: 5, name: 'jj', value: 6
-    },
+  dataChart: any = [
   ];
 
-  playerList = [
-    { id: 1, name: 'boss' },
-    { id: 2, name: 'best' },
-    { id: 3, name: 'jame' },
-    { id: 4, name: 'jatt' },
-    { id: 5, name: 'jj' },
-  ]
+  playerList: any[] = []
   myControl = new FormControl('');
-  players: string[] = ['One', 'Two', 'Three', '44522', '44523', '6442', '7442'];
-  filteredOptions: Observable<string[]> | undefined;
+  filteredOptions: Observable<any[]> | undefined;
 
   validateRegisterLottery = true;
 
@@ -78,57 +58,110 @@ export class DashboardComponent implements OnInit {
     lottery: '',
     player: '',
   }
+  lotteryLeft = 0;
 
+  async loadChart() {
+    const responseChart = await lastValueFrom(this._service.getChart$());
+    if (responseChart.code == 0) {
+      this.dataChart = responseChart.data.lotteryPlayer;
+      this.lotteryLeft = responseChart.data.lotteryLeft
+    }
+  }
 
-  ngOnInit() {
+  async loadPlayers() {
+    const responsePlayer = await lastValueFrom(this._service.getChart$());
+    if (responsePlayer.code == 0) {
+      console.log(responsePlayer);
+      this.playerList = responsePlayer.data.lotteryPlayer;
+    }
+  }
+
+  async ngOnInit() {
+    this.loadChart();
+    this.loadPlayers();
+    const plugin = {
+      id: 'emptyDoughnut',
+      afterDraw(chart: any, args: any, options: any) {
+        const { datasets } = chart.data;
+        const { color, width, radiusDecrease } = options;
+        let hasData = false;
+
+        for (let i = 0; i < datasets.length; i += 1) {
+          const dataset = datasets[i];
+          let total = 0;
+          for (let item in dataset.data) {
+            total += dataset.data[item];
+          }
+          hasData = hasData || (total > 0);
+        }
+        if (!hasData) {
+          const { chartArea: { left, top, right, bottom }, ctx } = chart;
+          const centerX = (0 + right) / 2;
+          const centerY = (0 + bottom) / 2;
+          const r = Math.min(right - 0, bottom - 0) / 2;
+          ctx.beginPath();
+          ctx.lineWidth = width || 2;
+          ctx.strokeStyle = color || 'rgba(255, 128, 0, 0.5)';
+          ctx.arc(centerX, centerY, (r - radiusDecrease || 0), 0, 2 * Math.PI);
+          ctx.stroke();
+        }
+      }
+    };
+
     this.ctx = document.getElementById('myChart');
     this.config = {
       type: 'pie',
       options: {
         plugins: {
-          legend: {
-            position: 'right',
-            align: 'center',
-            labels: {
-              padding: 20,
-              font: {
-                size: 20
-              }
-            }
+          emptyDoughnut: {
+            color: 'rgba(255, 128, 0, 0.5)',
+            width: 2,
+            radiusDecrease: 20
           },
         }
       },
       data: {
-        labels: this.dataChart.map(s => (s.name + ' : ' + s.value)),
         datasets: [{
           label: 'Lottery Total',
-          data: this.dataChart.map(s => (s.value)),
+          data: this.dataChart.map((s: { total: any; }) => (s.total)),
           borderAlign: 'center',
           borderWidth: 2,
           borderColor: 'white',
           backgroundColor: this.backgroundColors,
         }],
 
-      }
+      },
+      plugins: [plugin]
     }
     const myChart = new Chart(this.ctx, this.config);
+
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || '')),
     );
   }
-  private _filter(value: string): string[] {
+  private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
-    return this.players.filter(player => player.toLowerCase().includes(filterValue));
+    return this.playerList.filter(player => player.playerName.toLowerCase().includes(filterValue));
   }
 
   onSelectionChange(event: any) {
     console.log(event.option.value);
   }
 
+  clearSelectPlayer() {
+    this.registerLoterry.player = '';
+  }
+
   onlyNumberKey(event: KeyboardEvent) {
     if (event.keyCode > 31 && (event.keyCode < 48 || event.keyCode > 57))
       return false;
+    return true;
+  }
+  playerNameKeypress(event: KeyboardEvent) {
+    if (event.keyCode == 13) {
+      this.registerPlayerOnClick();
+    }
     return true;
   }
 
@@ -143,27 +176,25 @@ export class DashboardComponent implements OnInit {
     }
   }
   registerLotteryOnClick() {
-    console.log("length: " + this.registerLoterry.lottery.length);
-    console.log("length: " + this.registerLoterry.player);
-    if (!this.players.includes(this.registerLoterry.player)) {
-      this.alertMessage = 'This name does not exist in the system. Please register first.';
-      this.showAlert();
-    }
-    else if (this.registerLoterry.lottery.length < 6) {
-      this.alertMessage = 'Please fill 6 digit before register';
-      this.showAlert();
-    }
-    else {
-      this.alertMessage = 'Register lottery for ' + this.registerLoterry.player + ' number ' + this.registerLoterry.lottery + ' is successful!';
-      this.showAlert();
-      this.registerLoterry.lottery = '';
-      this.registerLoterry.player = '';
-    }
+    this.alertMessage = 'Register lottery for ' + this.registerLoterry.player + ' number ' + this.registerLoterry.lottery + ' is successful!';
+    this.showAlert();
+    this.registerLoterry.lottery = '';
+    this.registerLoterry.player = '';
 
   }
-  registerPlayerOnClick() {
-    this.alertMessage = 'Register Player ' + this.name + ' is successful!';
-    this.showAlert();
+  async registerPlayerOnClick() {
+    const responsePlayer = await lastValueFrom(this._service.addPlayer$(this.name));
+    if (responsePlayer.code == 0) {
+      this.name = ''
+      this.playerList = responsePlayer.data.lotteryPlayer;
+      this.alertMessage = 'Register Player ' + this.name + ' is successful!';
+      this.showAlert();
+      this.loadChart();
+      this.loadPlayers();
+    } else {
+      this.alertMessage = 'Register Player ' + this.name + ' is failed!';
+      this.showAlert();
+    }
   }
   showAlert() {
     const config = new MatSnackBarConfig();

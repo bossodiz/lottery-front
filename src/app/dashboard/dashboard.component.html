@@ -1,45 +1,69 @@
-<div class="chart">
-  <canvas id="myChart"></canvas>
-</div>
+<mat-grid-list cols="2" rowHeight="500px">
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <div class="text-inside-grid-right chart"><canvas id="myChart"></canvas></div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1" style="justify-content: left !important;">
+    <mat-card class="text-inside-grid-left" style="width: 30%; height: 80%;">
+      <mat-card-header style="padding-bottom: 16px;">
+        <mat-card-title>Players : {{playerList.length}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list class="list-player">
+          @for (item of playerList; track item) {
+          <mat-list-item role="listitem">
+            <div mat-line>{{item.playerName}} {{item.total}}</div>
+          </mat-list-item>
+          }
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions style="width: 100%;padding: 0 16px;position: absolute;bottom: 1px;">
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Player Name</mat-label>
+          <input matInput type="text" [(ngModel)]="name" maxlength="10" (keypress)="playerNameKeypress($event)">
+          @if (name) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="name=''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
 <div style="padding-top: 1em; text-align: center; font-size: large">
-  <span>There are 66 lottery tickets remaining.</span>
+  <span>There are {{lotteryLeft}} lottery tickets remaining.</span>
 </div>
-{{registerLoterry | json}}
 <div class="panel-content">
-  <mat-form-field class="field-lottery-digit">
+  <mat-form-field class="field-lottery-digit" appearance="outline">
     <mat-label>Lottery</mat-label>
     <input matInput type="text" [(ngModel)]="registerLoterry.lottery" maxlength="6" (keypress)="onlyNumberKey($event)">
+    @if (registerLoterry.lottery) {
     <button matSuffix mat-icon-button aria-label="Clear" (click)="registerLoterry.lottery=''">
       <mat-icon>close</mat-icon>
     </button>
+    }
   </mat-form-field>
-  <mat-form-field class="field-select-player">
+  <mat-form-field class="field-select-player" appearance="outline">
     <mat-label>Select Player</mat-label>
     <input type="text" aria-label="Number" matInput [(ngModel)]="registerLoterry.player" [formControl]="myControl"
       [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       @for (option of filteredOptions | async; track option) {
-      <mat-option [value]="option">{{option}}</mat-option>
+      <mat-option [value]="option.playerName">{{option.playerName}}</mat-option>
       }
     </mat-autocomplete>
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="registerLoterry.player=''">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field>
-  <button id="buttonRegister" mat-raised-button class="button-register" [disabled]="disableBtnRegisLot()"
-    (click)="registerLotteryOnClick()">Register
-    Lottery</button>
-</div>
-<div class="panel-content">
-  <mat-form-field class="field-lottery-digit">
-    <mat-label>register name</mat-label>
-    <input matInput type="text" [(ngModel)]="name" maxlength="10">
-    @if (name) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="name=''">
+    @if (registerLoterry.player) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelectPlayer()">
       <mat-icon>close</mat-icon>
     </button>
     }
   </mat-form-field>
-  <button mat-raised-button class="button-register" [disabled]="!name " (click)="registerPlayerOnClick()">Register
-    Player</button>
+  <button mat-raised-button class="button-register" [disabled]="disableBtnRegisLot()" color="primary"
+    (click)="registerLotteryOnClick()">
+    <strong>ลงทะเบียน</strong>
+  </button>
+</div>
+<div class="panel-content">
+
+
 </div>
