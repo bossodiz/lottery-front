@@ -15,27 +15,37 @@ export class CountDownTimerComponent implements OnDestroy {
   showTime: boolean = false;
   audioLongTime = new Audio('../assets/180sec.mp3');
   audio10Sec = new Audio('../assets/10sec.mp3');
+  audio9Sec = new Audio('../assets/9sec.mp3');
+  audio8Sec = new Audio('../assets/8sec.mp3');
+  audio7Sec = new Audio('../assets/7sec.mp3');
+  audio6Sec = new Audio('../assets/6sec.mp3');
+  audio5Sec = new Audio('../assets/5sec.mp3');
+  audio4Sec = new Audio('../assets/4sec.mp3');
+  audio3Sec = new Audio('../assets/3sec.mp3');
+  audio2Sec = new Audio('../assets/2sec.mp3');
+  audio1Sec = new Audio('../assets/1sec.mp3');
+  audioTimeUp = new Audio('../assets/timeup.mp3');
 
-  disableStartBtn() {
-    let validateMinutes = this.minutes < 1;
-    let validateSecond = this.seconds < 11;
-    if (this.remainingSeconds < 11 && this.remainingSeconds != 0) {
-      return true
-    }
-    if (validateMinutes && validateSecond) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
+  // disableStartBtn() {
+  //   let validateMinutes = this.minutes < 1;
+  //   let validateSecond =  this.seconds < 11;
+  //   if (this.remainingSeconds < 11 && this.remainingSeconds != 0){
+  //     return true
+  //   }
+  //   if (validateMinutes && validateSecond){
+  //     return true;
+  //   }
+  //   else{
+  //     return false;
+  //   }
+  // }
 
-  disableInput() {
+  disableInput(){
     let timeIsCounting = this.remainingSeconds > 0;
-    if (timeIsCounting) {
+    if (timeIsCounting){
       return true;
     }
-    else {
+    else{
       return false;
     }
   }
@@ -48,9 +58,10 @@ export class CountDownTimerComponent implements OnDestroy {
     }
   }
 
+
   startCountdown() {
-    if (this.minutes === 0 && this.seconds === 0) {
-      return;
+    if (this.minutes === 0 && this.seconds === 0){
+      return ;
     }
     if (this.remainingSeconds === 0) {
       this.remainingSeconds = this.minutes * 60 + this.seconds;
@@ -72,16 +83,23 @@ export class CountDownTimerComponent implements OnDestroy {
   stopCountdown() {
     this.audioLongTime.pause();
 
-
     if (this.countdownSubscription) {
       this.countdownSubscription.unsubscribe();
       this.isCounting = false;
       this.keepTime = this.remainingSeconds;
     }
   }
+  getDefaultTime(){
+    if (!this.showTime){
+      return `0`;
+    }
+    else{
+      return null;
+    }
+
+  }
 
   resetCountdown() {
-    this.audio10Sec.pause();
     this.stopCountdown();
     this.minutes = 0;
     this.seconds = 0;
@@ -91,13 +109,42 @@ export class CountDownTimerComponent implements OnDestroy {
   }
 
   getRemainingTime() {
-    if (this.remainingSeconds === 0) {
-      return "Time's up";
-    }
-    else if (this.remainingSeconds < 11) {
-      this.audioLongTime.pause();
-      this.audio10Sec.play();
-      this.disableStartBtn();
+    let time = this.remainingSeconds;
+    switch (time) {
+      case 10:
+        this.audioLongTime.pause();
+        this.audio10Sec.play();
+        break;
+      case 9:
+        this.audio9Sec.play();
+        break;
+      case 8:
+        this.audio8Sec.play();
+        break;
+      case 7:
+        this.audio7Sec.play();
+        break;
+      case 6:
+        this.audio6Sec.play();
+        break;
+      case 5:
+        this.audio5Sec.play();
+        break;
+      case 4:
+        this.audio4Sec.play();
+        break;
+      case 3:
+        this.audio3Sec.play();
+        break;
+      case 2:
+        this.audio2Sec.play();
+        break;
+      case 1:
+        this.audio1Sec.play();
+        break;
+      case 0:
+        this.audioTimeUp.play();
+        return "Time's up";
     }
     return this.getFormattedTime();
   }
@@ -124,3 +171,4 @@ export class CountDownTimerComponent implements OnDestroy {
   }
 
 }
+

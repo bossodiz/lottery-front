@@ -2,12 +2,13 @@
 
   <div class="countdown-circle" [ngClass]="{'final-countdown': isCounting && remainingSeconds <= 10}">
     <p *ngIf="showTime" class="countdown-text">{{ getRemainingTime() }}</p>
+    <p class="countdown-text" > {{getDefaultTime()}} </p>
   </div>
 
   <div class="panel-content">
     <mat-form-field class="field-timer">
-      <mat-label>Minutes (0-9) </mat-label>
-      <input matInput type="text" [(ngModel)]="minutes" maxlength="1" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
+      <mat-label>Minutes</mat-label>
+      <input matInput type="text" [(ngModel)]="minutes" maxlength="6" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
       @if (minutes) {
       <button matSuffix mat-icon-button aria-label="Clear" [disabled]="disableInput()" (click)="minutes = 0">
         <mat-icon>close</mat-icon>
@@ -16,8 +17,8 @@
     </mat-form-field>
 
     <mat-form-field class="field-timer">
-      <mat-label>Seconds (11-99)</mat-label>
-      <input matInput type="text" [(ngModel)]="seconds" maxlength="2" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
+      <mat-label>Seconds</mat-label>
+      <input matInput type="text" [(ngModel)]="seconds" maxlength="7" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
       @if (seconds) {
       <button matSuffix mat-icon-button aria-label="Clear" [disabled]="disableInput()" (click)="seconds = 0" >
         <mat-icon>close</mat-icon>
@@ -27,8 +28,8 @@
   </div>
 
   <div class="panel-content">
-    <button mat-raised-button class="button-timer" [disabled]="disableStartBtn()" (click)="toggleCountdown()" >{{ isCounting ? 'Stop' : 'Start' }}</button>
-    <button mat-raised-button class="button-timer" [disabled]="disableStartBtn()" (click)="resetCountdown()">Reset</button>
+    <button mat-raised-button class="button-timer"  (click)="toggleCountdown()" >{{ isCounting ? 'Stop' : 'Start' }}</button>
+    <button mat-raised-button class="button-timer"  (click)="resetCountdown()">Reset</button>
   </div>
 
 </div>
