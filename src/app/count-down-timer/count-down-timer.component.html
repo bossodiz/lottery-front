@@ -3,6 +3,7 @@
   <div class="countdown-circle" [ngClass]="{'final-countdown': isCounting && remainingSeconds <= 10}">
     <p *ngIf="showTime" class="countdown-text">{{ getRemainingTime() }}</p>
     <p class="countdown-text" > {{getDefaultTime()}} </p>
+
   </div>
 
   <div class="panel-content">
