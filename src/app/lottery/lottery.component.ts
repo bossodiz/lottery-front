@@ -30,4 +30,9 @@ export class LotteryComponent {
       return false;
     return true;
   }
+
+  resetButton() {
+    this.name = '';
+    this.digit = '';
+  }
 }
