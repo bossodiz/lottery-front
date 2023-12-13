@@ -25,6 +25,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from '../service/auth.interceptor';
 import { MatListModule } from '@angular/material/list';
+import {MatTableModule} from '@angular/material/table';
 Chart.register(...registerables)
 
 @NgModule({
@@ -54,6 +55,9 @@ Chart.register(...registerables)
     MatGridListModule,
     MatCardModule,
     MatListModule,
+    MatTableModule,
+
+
   ],
   providers: [
     provideHttpClient(

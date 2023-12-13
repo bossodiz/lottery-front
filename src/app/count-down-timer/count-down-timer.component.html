@@ -7,7 +7,7 @@
   </div>
 
   <div class="panel-content">
-    <mat-form-field class="field-timer">
+    <mat-form-field class="field-timer" appearance="outline">
       <mat-label>Minutes</mat-label>
       <input matInput type="text" [(ngModel)]="minutes" maxlength="6" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
       @if (minutes) {
@@ -17,7 +17,7 @@
       }
     </mat-form-field>
 
-    <mat-form-field class="field-timer">
+    <mat-form-field class="field-timer" appearance="outline">
       <mat-label>Seconds</mat-label>
       <input matInput type="text" [(ngModel)]="seconds" maxlength="7" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
       @if (seconds) {

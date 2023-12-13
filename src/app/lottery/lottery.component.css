@@ -1,0 +1,30 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.field {
+  width: 300px;
+}
+
+.panel-content {
+  display: flex;
+  gap: 5rem;
+  justify-content: center;
+  padding-top: 5%;
+}
+.button-timer {
+  width: 100px;
+  height: 50px;
+}
+
+.table-container {
+  width: 80%;
+  margin: auto;
+  max-width: 10px;
+
+}
+

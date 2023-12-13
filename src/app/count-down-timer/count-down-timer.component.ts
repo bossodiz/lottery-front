@@ -6,10 +6,11 @@ import { interval, Subscription } from 'rxjs';
   styleUrls: ['./count-down-timer.component.css']
 })
 export class CountDownTimerComponent implements OnDestroy {
-  minutes: number = 0;
-  seconds: number = 0;
+  minutes: any = 0;
+  seconds: any = 0;
   remainingSeconds: number = 0;
   keepTime: number = 0;
+  convertMinToSecond : number = 60;
   countdownSubscription: Subscription | undefined;
   isCounting: boolean = false;
   showTime: boolean = false;
@@ -65,7 +66,7 @@ export class CountDownTimerComponent implements OnDestroy {
       return ;
     }
     if (this.remainingSeconds === 0) {
-      this.remainingSeconds = this.minutes * 60 + this.seconds;
+      this.remainingSeconds = (parseInt(this.minutes) * this.convertMinToSecond ) + parseInt(this.seconds);
     }
 
     this.audioLongTime.play();
