@@ -163,7 +163,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       data: {
-        labels: this.dataChart.map((s: { playerName: any; }) => (s.playerName)),
+        // labels: this.dataChart.map((s: { playerName: any; }) => (s.playerName)),
         datasets: [{
           label: 'Lottery ',
           data: this.dataChart.map((s: { total: any; }) => (s.total)),

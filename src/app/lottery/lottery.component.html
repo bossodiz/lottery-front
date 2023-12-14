@@ -10,25 +10,37 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="field" appearance="outline">
-    <mat-label>ชื่อเจ้าของสลาก</mat-label>
-    <input matInput type="text"  maxlength="10" [(ngModel)]="name" >
-
-    <button matSuffix mat-icon-button aria-label="Clear"  (click)="name = '' ">
+  <mat-form-field class="field-select-player" appearance="outline">
+    <mat-label>Select Player</mat-label>
+    <input type="text" aria-label="Number" matInput [(ngModel)]="searchLoterry.player" [formControl]="myControl"
+      [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+      @for (option of filteredOptions | async; track option) {
+      <mat-option [value]="option.playerName">{{option.playerName}}</mat-option>
+      }
+    </mat-autocomplete>
+    @if (searchLoterry.player) {
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelectPlayer()">
       <mat-icon>close</mat-icon>
     </button>
-
+    }
   </mat-form-field>
 </div>
 <div class="panel-content">
   <mat-form-field class="field" appearance="outline">
     <mat-label>ใส่เลขสลาก</mat-label>
-    <input matInput type="text"  maxlength="6" [(ngModel)]="digit" (keypress)="onlyNumberKey($event)">
-
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="digit = '' ">
-      <mat-icon>close</mat-icon>
-    </button>
-
+    <input matInput type="text" aria-label="Number" matInput [(ngModel)]="searchLoterry.lottery" [formControl]="myControl2" maxlength="6"
+    [matAutocomplete]="auto" (keypress)="onlyNumberKey($event)" (click)="clearLottery()" >
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+      @for (option of filteredOptions2 | async; track option) {
+      <mat-option [value]="option.number">{{option.number}}</mat-option>
+      }
+    </mat-autocomplete>
+    @if (searchLoterry.lottery) {
+      <button matSuffix mat-icon-button aria-label="Clear" (click)="clearLottery()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
   </mat-form-field>
 </div>
 <div class="panel-content">
