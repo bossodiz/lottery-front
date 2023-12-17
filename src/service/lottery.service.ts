@@ -1,4 +1,3 @@
-import { Lottery } from './../app/lottery/lottery.component';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -15,7 +14,7 @@ export class LotteryService {
   }
 
   getLottery$() {
-    return this.http.get<any>(`/lottery/get-lottery`);
+    return this.http.get<any>(`/lottery/search`);
   }
 
 }
