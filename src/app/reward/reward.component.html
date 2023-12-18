@@ -1,1 +1,7 @@
-<h1>Reward</h1>
+<div style="display: flex; justify-content: center; align-items: center;margin-top: 2em;">
+  <div id="wheelOfFortune">
+    <canvas id="wheel" width="700" height="700"></canvas>
+    <div id="spin" (click)="spinner()">SPIN</div>
+  </div>
+</div>
+<p style="display: flex; justify-content: center;margin-top: 5em;">{{winner}}</p>
