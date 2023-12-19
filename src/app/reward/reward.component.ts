@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-reward',
@@ -7,12 +8,13 @@ import { Component } from '@angular/core';
 })
 export class RewardComponent {
 
-  constructor() {
-  }
+  constructor() {}
 
   spin: any
 
   winner!: ''
+
+  spinSuccess: boolean = false;
 
   colors = ["#f82", "#0bf"];
   sectors: any[] = [
@@ -168,6 +170,7 @@ export class RewardComponent {
   spinner() {
     if (!this.angVel) this.angVel = this.rand(0.25, 0.35);
     this.isSpinner = true
+
   }
 
   getIndex = () =>
@@ -191,6 +194,7 @@ export class RewardComponent {
     this.ctx.fillStyle = "#fff";
     this.ctx.font = "bold 30px sans-serif";
     this.ctx.fillText(sector.label, this.rad - 10, 10);
+
     //
     this.ctx.restore();
   }
@@ -198,13 +202,17 @@ export class RewardComponent {
   rotate(first = false) {
     const sector = this.sectors[this.getIndex()];
     this.ctx.canvas.style.transform = `rotate(${this.ang - this.PI / 2}rad)`;
-    this.spin.textContent = !this.angVel ? "spin (" + this.sectors.length + ")" : sector.label;
+    this.spin.textContent = !this.angVel ? "SPIN " : sector.label;
     if (this.isSpinner) {
       this.spin.textContent = sector.label;
       this.winner = sector.label;
     }
+    else{
+      this.launchConfetti();
+    }
     if (!first) {
       this.lastSelection = !this.angVel ? this.lastSelection : this.getIndex();
+
     }
     this.spin.style.background = sector.color;
   }
@@ -217,4 +225,18 @@ export class RewardComponent {
     this.ang %= this.TAU; // Normalize angle
     this.rotate();
   }
+
+  // เรียกหลังจากได้ตัวเลขครบแล้ว
+  launchConfetti() {
+    confetti.create(undefined, {
+      resize: true,
+      useWorker: true,
+    })({
+      particleCount: 1000,
+      spread: 300,
+      origin: { y: 0.6 },
+    });
+  }
+
 }
+
