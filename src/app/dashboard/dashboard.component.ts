@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
     lottery: '',
     player: '',
   }
+
+  deletePlayerName: string = ''
+
   lotteryLeft = 0;
 
   async loadChart() {
@@ -125,8 +128,12 @@ export class DashboardComponent implements OnInit {
     console.log(event.option.value);
   }
 
-  clearSelectPlayer() {
+  clearSelectPlayerRegisterLottery() {
     this.registerLoterry.player = '';
+  }
+
+  clearSelectPlayerDelete() {
+    this.deletePlayerName = '';
   }
 
   onlyNumberKey(event: KeyboardEvent) {
@@ -151,6 +158,17 @@ export class DashboardComponent implements OnInit {
       return false;
     }
   }
+
+  disableBtnDelete() {
+    let validatePlayer = this.deletePlayerName.length < 1
+    if ( validatePlayer) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   async registerLotteryOnClick() {
     const response = await lastValueFrom(this._service.addLottery$(this.registerLoterry.lottery, this.registerLoterry.player));
     if (response.code == 1) {
@@ -168,12 +186,13 @@ export class DashboardComponent implements OnInit {
     this.myChart.config.data.datasets[0].backgroundColor = this.dataChart.map((s: { color: any; }) => (s.color)),
       this.myChart.update();
   }
+
   async registerPlayerOnClick() {
     const responsePlayer = await lastValueFrom(this._service.addPlayer$(this.name));
     if (responsePlayer.code == 0) {
-      this.name = ''
       this.playerList = responsePlayer.data.lotteryPlayer;
       this.alertMessage = 'Register Player ' + this.name + ' is successful!';
+      this.name = ''
       this.showAlert();
       this.loadChart();
       this.loadPlayers();
@@ -187,12 +206,29 @@ export class DashboardComponent implements OnInit {
     config.duration = 3000;
     config.horizontalPosition = 'center';
     config.verticalPosition = 'bottom';
+    config.panelClass = ['alert-success-background'];
+
     const alertBar = this._snackBar.open(this.alertMessage, 'Close', config);
     alertBar.onAction().subscribe(() => {
       alertBar.dismiss();
     });
   }
 
+  async deletePlayerOnclick() {
+    const responsePlayer = await lastValueFrom(this._service.deletePlayer$(this.deletePlayerName));
+    if (responsePlayer.code == 0) {
+      this.playerList = responsePlayer.data.lotteryPlayer;
+      this.alertMessage = 'Delete Player ' + this.name + ' is successful!';
+      this.deletePlayerName = ''
+      this.showAlert();
+      this.loadChart();
+      this.loadPlayers();
+    }
+    else {
+      this.alertMessage = 'Delete Player ' + this.name + ' is failed!';
+      this.showAlert();
+    }
+  }
 
 
 }
