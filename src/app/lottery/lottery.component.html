@@ -1,10 +1,10 @@
 <mat-card class="card">
   <mat-card-content>
-    <mat-grid-list cols="3" rowHeight="10em">
+    <mat-grid-list cols="3" rowHeight="7em">
       <mat-grid-tile>
         <mat-form-field appearance="fill" appearance="outline">
           <mat-label>ประเภทรางวัล</mat-label>
-          <mat-select >
+          <mat-select [(ngModel)]="searchLoterry.lotteryType">
             <mat-option value="1">รางวัลที่ 1</mat-option>
             <mat-option value="2">เลขหน้า 3 ตัว</mat-option>
             <mat-option value="3">เลขท้าย 3 ตัว</mat-option>
@@ -52,7 +52,7 @@
   <div class="example-table-container">
     <table mat-table [dataSource]="dataSource" matSort class="example-table">
       <ng-container matColumnDef="no">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> no </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ลำดับ </th>
         <td mat-cell *matCellDef="let element"> {{element.no}} </td>
       </ng-container>
 
@@ -62,22 +62,22 @@
       </ng-container>
 
       <ng-container matColumnDef="threeDigitFront">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> threeDigitFront </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 3 ตัวหน้า </th>
         <td mat-cell *matCellDef="let element"> {{element.threeDigitFront}} </td>
       </ng-container>
 
       <ng-container matColumnDef="threeDigitLast">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> threeDigitLast </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 3 ตัวท้าย </th>
         <td mat-cell *matCellDef="let element"> {{element.threeDigitLast}} </td>
       </ng-container>
 
       <ng-container matColumnDef="twoDigitLast">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> twoDigitLast </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 2 ตัวท้าย </th>
         <td mat-cell *matCellDef="let element"> {{element.twoDigitLast}} </td>
       </ng-container>
 
       <ng-container matColumnDef="playerName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> playerName </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> เจ้าของ </th>
         <td mat-cell *matCellDef="let element"> {{element.playerName}} </td>
       </ng-container>
 

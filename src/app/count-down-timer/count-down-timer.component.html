@@ -1,15 +1,15 @@
 <div class="countdown-container">
-
   <div class="countdown-circle" [ngClass]="{'final-countdown': isCounting && remainingSeconds <= 10}">
     <p *ngIf="showTime" class="countdown-text">{{ getRemainingTime() }}</p>
-    <p class="countdown-text" > {{getDefaultTime()}} </p>
+    <p class="countdown-text"> {{getDefaultTime()}} </p>
 
   </div>
 
   <div class="panel-content">
     <mat-form-field class="field-timer" appearance="outline">
       <mat-label>Minutes</mat-label>
-      <input matInput type="text" [(ngModel)]="minutes" maxlength="6" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
+      <input matInput type="text" [(ngModel)]="minutes" maxlength="6" [disabled]="disableInput()"
+        (keypress)="onlyNumberKey($event)">
       @if (minutes) {
       <button matSuffix mat-icon-button aria-label="Clear" [disabled]="disableInput()" (click)="minutes = 0">
         <mat-icon>close</mat-icon>
@@ -19,9 +19,10 @@
 
     <mat-form-field class="field-timer" appearance="outline">
       <mat-label>Seconds</mat-label>
-      <input matInput type="text" [(ngModel)]="seconds" maxlength="7" [disabled]="disableInput()" (keypress)="onlyNumberKey($event)">
+      <input matInput type="text" [(ngModel)]="seconds" maxlength="7" [disabled]="disableInput()"
+        (keypress)="onlyNumberKey($event)">
       @if (seconds) {
-      <button matSuffix mat-icon-button aria-label="Clear" [disabled]="disableInput()" (click)="seconds = 0" >
+      <button matSuffix mat-icon-button aria-label="Clear" [disabled]="disableInput()" (click)="seconds = 0">
         <mat-icon>close</mat-icon>
       </button>
       }
@@ -29,8 +30,8 @@
   </div>
 
   <div class="panel-content">
-    <button mat-raised-button class="button-timer"  (click)="toggleCountdown()" >{{ isCounting ? 'Stop' : 'Start' }}</button>
-    <button mat-raised-button class="button-timer"  (click)="resetCountdown()">Reset</button>
+    <button mat-raised-button class="button-timer" (click)="toggleCountdown()">{{ isCounting ? 'Stop' : 'Start'
+      }}</button>
+    <button mat-raised-button class="button-timer" (click)="resetCountdown()">Reset</button>
   </div>
-
 </div>

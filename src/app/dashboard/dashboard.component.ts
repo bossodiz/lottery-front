@@ -68,63 +68,6 @@ export class DashboardComponent implements OnInit {
   }
 
   createChart() {
-    const plugin: any = {
-      id: 'emptyDoughnut',
-      afterDraw(chart: any, args: any, options: any) {
-        const { datasets } = chart.data;
-        const { color, width, radiusDecrease } = options;
-        let hasData = false;
-
-        for (let i = 0; i < datasets.length; i += 1) {
-          const dataset = datasets[i];
-          let total = 0;
-          for (let item in dataset.data) {
-            total += dataset.data[item];
-          }
-          hasData = hasData || (total > 0);
-        }
-        if (!hasData) {
-          const { chartArea: { left, top, right, bottom }, ctx } = chart;
-          const centerX = (0 + right) / 2;
-          const centerY = (0 + bottom) / 2;
-          const r = Math.min(right - 0, bottom - 0) / 2;
-          ctx.beginPath();
-          ctx.lineWidth = width || 2;
-          ctx.strokeStyle = color || 'rgba(255, 128, 0, 0.5)';
-          ctx.arc(centerX, centerY, (r - radiusDecrease || 0), 0, 2 * Math.PI);
-          ctx.stroke();
-        }
-      }
-    };
-    const alwaysShowTooltip = {
-      id: 'alwaysShowTooltip',
-      afterDraw(chart: any, args: any, options: any) {
-        const { ctx } = chart;
-        ctx.save();
-        chart.data.datasets.forEach((dataset: any, i: any) => {
-          chart.getDatasetMeta(i).data.forEach((datapoint: any, index: any) => {
-            if (dataset.data[index] > 0) {
-              const { x, y } = datapoint.tooltipPosition();
-              const text = chart.data.labels[index] + ': ' + chart.data.datasets[i].data[index];
-              const textWidth = ctx.measureText(text).width;
-              ctx.fillStyle = 'rgba(0,0,0,0.8)';
-              ctx.fillRect(x - ((textWidth + 10) / 2), y - 10, textWidth + 10, 20);
-
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.fill();
-              ctx.restore();
-
-              ctx.font = '20px Arial';
-              ctx.fillStyle = 'White';
-              ctx.fillText(text, x - (textWidth / 2), y + 9)
-              ctx.restore();
-            }
-          });
-        });
-      }
-    }
-
     let config: any = {
       type: 'pie',
       options: {
@@ -174,7 +117,6 @@ export class DashboardComponent implements OnInit {
         }],
 
       },
-      // plugins: [alwaysShowTooltip]
     }
     this.myChart = new Chart('myChart', config);
   }
@@ -211,8 +153,12 @@ export class DashboardComponent implements OnInit {
   }
   async registerLotteryOnClick() {
     const response = await lastValueFrom(this._service.addLottery$(this.registerLoterry.lottery, this.registerLoterry.player));
-
-    this.alertMessage = 'Register lottery for ' + this.registerLoterry.player + ' number ' + this.registerLoterry.lottery + ' is successful!';
+    if (response.code == 1) {
+      this.alertMessage = response.error;
+      this.showAlert();
+      return;
+    }
+    this.alertMessage = 'ลงทะเบียนสำเร็จ : ' + this.registerLoterry.lottery + ' :  ' + this.registerLoterry.player;
     this.showAlert();
     this.registerLoterry.lottery = '';
     this.registerLoterry.player = '';

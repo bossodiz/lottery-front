@@ -1,5 +1,8 @@
+import { RewardsService } from './../../service/rewards.service';
 import { Component } from '@angular/core';
 import * as confetti from 'canvas-confetti';
+import { lastValueFrom } from 'rxjs';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-reward',
@@ -8,120 +11,21 @@ import * as confetti from 'canvas-confetti';
 })
 export class RewardComponent {
 
-  constructor() {}
+  constructor(private _rewardsService: RewardsService) { }
+
+  color: ThemePalette = 'warn';
+  isChecked = true
+
+  lotteryType: any[] = []
+  selectedValueType = 1;
 
   spin: any
+  textSpin = 'SPIN'
 
-  winner!: ''
+  colors = ["#DA544A", "#444444"];
+  currentColor = false;
+  sectors: any[] = [];
 
-  spinSuccess: boolean = false;
-
-  colors = ["#f82", "#0bf"];
-  sectors: any[] = [
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-    { color: this.colors[0], label: '155676' },
-    { color: this.colors[1], label: '536154' },
-    { color: this.colors[0], label: '101010' },
-    { color: this.colors[1], label: '123141' },
-
-  ];
-
-  rand = (m: number, M: number) => Math.random() * (M - m) + m;
   tot!: number;
   ctx!: any;
   dia!: number;
@@ -130,31 +34,62 @@ export class RewardComponent {
   TAU!: number;
   arc0!: number;
 
-  winners = [];
-
-  modeDelete = true;
-
-  friction = 0.997; // 0.995=soft, 0.99=mid, 0.98=hard
+  friction = 0.995; // 0.995=soft, 0.99=mid, 0.98=hard
   angVel = 0; // Angular velocity
   ang = 0; // Angle in radians
   lastSelection!: number;
 
   isSpinner: boolean = false;
-
-  ngDoCheck(): void {
-    this.engine();
-  }
-
-  engine() {
-    requestAnimationFrame(this.frame.bind(this));
-  }
+  freeText = '';
 
   ngOnInit() {
-    this.createWheel();
+    this.loadRewardType();
+    this.reload();
+  }
+
+  async loadRewardType() {
+    const response = await lastValueFrom(this._rewardsService.getType$());
+    if (response.code == 0) {
+      this.lotteryType = response.data;
+    }
+  }
+
+  concat(str: string, multiplier: number): string {
+    let concat = ''
+    for (let i = 0; i < multiplier; i++) {
+      concat += str;
+    }
+    return concat;
+  }
+
+
+  async reload() {
+    this.isSpinner = false;
+    window.clearInterval(this.intervalID);
+    if (!this.selectedValueType) return;
+    const response = await lastValueFrom(this._rewardsService.getData$(this.selectedValueType));
+    if (response.code == 0) {
+      this.sectors = []
+      this.currentColor = false;
+      const list = response.data.lottery;
+      var i: any;
+      for (i in response.data.lottery) {
+        this.sectors.push({ color: this.colors[this.currentColor ? 0 : 1], label: list[i] })
+        this.currentColor = !this.currentColor
+      }
+      if (this.sectors.length % 2 == 1) {
+        let char = this.sectors[0].label.length;
+        this.freeText = this.concat('0', char);
+        this.sectors.push({ color: this.colors[this.currentColor ? 0 : 1], label: this.freeText })
+        this.currentColor = !this.currentColor
+      }
+      this.createWheel();
+    }
   }
 
   createWheel() {
     this.spin = document.getElementById("spin");
+    this.spin.textContent = 'SPIN';
     var canvas: any = document.getElementById("wheel");
     this.ctx = canvas.getContext("2d");
     this.dia = this.ctx.canvas.width;
@@ -165,12 +100,6 @@ export class RewardComponent {
     this.arc0 = this.TAU / this.sectors.length;
     this.sectors.forEach((sector, i) => this.drawSector(sector, i));
     this.rotate(true);
-  }
-
-  spinner() {
-    if (!this.angVel) this.angVel = this.rand(0.25, 0.35);
-    this.isSpinner = true
-
   }
 
   getIndex = () =>
@@ -194,7 +123,6 @@ export class RewardComponent {
     this.ctx.fillStyle = "#fff";
     this.ctx.font = "bold 30px sans-serif";
     this.ctx.fillText(sector.label, this.rad - 10, 10);
-
     //
     this.ctx.restore();
   }
@@ -202,31 +130,55 @@ export class RewardComponent {
   rotate(first = false) {
     const sector = this.sectors[this.getIndex()];
     this.ctx.canvas.style.transform = `rotate(${this.ang - this.PI / 2}rad)`;
-    this.spin.textContent = !this.angVel ? "SPIN " : sector.label;
     if (this.isSpinner) {
       this.spin.textContent = sector.label;
-      this.winner = sector.label;
-    }
-    else{
-      this.launchConfetti();
     }
     if (!first) {
       this.lastSelection = !this.angVel ? this.lastSelection : this.getIndex();
-
     }
     this.spin.style.background = sector.color;
   }
 
+  intervalID: any
+  rand = (m: number, M: number) => Math.random() * (M - m) + m;
+  spinner() {
+    if (!this.isSpinner) {
+      if (!this.angVel) this.angVel = this.rand(0.25, 0.50);
+      this.isSpinner = true
+      this.intervalID = window.setInterval(() => this.frame(), 1);
+    } else {
+      this.angVel = this.rand(0.25, 0.50);
+    }
+  }
+
   frame() {
-    if (!this.angVel) return;
     this.angVel *= this.friction; // Decrement velocity by friction
-    if (this.angVel < 0.0002) this.angVel = 0; // Bring to stop
     this.ang += this.angVel; // Update angle
     this.ang %= this.TAU; // Normalize angle
+    if (this.angVel < 0.00003) this.angVel = 0; // Bring to stop
+    if (this.angVel == 0) {
+      this.wheelStop();
+    }
     this.rotate();
   }
 
-  // เรียกหลังจากได้ตัวเลขครบแล้ว
+  wheelStop() {
+    window.clearInterval(this.intervalID);
+    this.isSpinner = false;
+    this.launchConfetti()
+    if (!this.isChecked && this.freeText != this.lastSelection.toString()) {
+      this.submitLottery();
+    }
+  }
+
+  async submitLottery() {
+    const number = this.sectors[this.lastSelection].label;
+    const response = await lastValueFrom(this._rewardsService.postSubmit$(number, this.selectedValueType));
+    if (response.code == 0) {
+      console.log('แจกรางวัล : ' + number);
+    }
+  }
+
   launchConfetti() {
     confetti.create(undefined, {
       resize: true,
@@ -237,6 +189,5 @@ export class RewardComponent {
       origin: { y: 0.6 },
     });
   }
-
 }
 

@@ -24,7 +24,7 @@ export class LotteryComponent {
   constructor(private _service: LotteryService) {
   }
   searchLoterry = {
-    lotteryType: '1',
+    lotteryType: '',
     lottery: '',
     player: '',
   }
@@ -129,6 +129,7 @@ export class LotteryComponent {
   resetButton() {
     this.clearSelectPlayer();
     this.clearLottery();
+    this.clearLotteryType();
     this.onSearch();
   }
 
@@ -141,7 +142,7 @@ export class LotteryComponent {
   }
 
   clearLotteryType() {
-    this.searchLoterry.lotteryType = '1';
+    this.searchLoterry.lotteryType = '';
   }
 
   initLotteryData(item: any, index: number): LotteryData {
