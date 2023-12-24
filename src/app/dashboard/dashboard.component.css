@@ -86,13 +86,3 @@
   float: right;
   text-align: right;
 }
-
-::ng-deep .alert-success-background {
-  background-color: green;
-  color: green;
-  background: green;
-}
-
-.alert-fail-background {
-  background-color: red;
-}

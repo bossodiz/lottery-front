@@ -62,7 +62,7 @@
       }
     </mat-autocomplete>
     @if (registerLoterry.player) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelectPlayerRegisterLottery()">
+    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelectPlayer()">
       <mat-icon>close</mat-icon>
     </button>
     }
@@ -73,24 +73,6 @@
   </button>
 </div>
 <div class="panel-content">
-  <mat-form-field class="field-select-player" appearance="outline">
-    <mat-label>Select Player</mat-label>
-    <input type="text" aria-label="Number" matInput [(ngModel)]="deletePlayerName" [formControl]="myControl"
-      [matAutocomplete]="auto">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-      @for (option of filteredOptions | async; track option) {
-      <mat-option [value]="option.playerName">{{option.playerName}}</mat-option>
-      }
-    </mat-autocomplete>
-    @if (deletePlayerName) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSelectPlayerDelete()">
-      <mat-icon>close</mat-icon>
-    </button>
-    }
-  </mat-form-field>
-  <button mat-raised-button class="button-register" [disabled]="disableBtnDelete()" color="primary"
-    (click)="deletePlayerOnclick()">
-    <strong>ลบชื่อผู้ใช้</strong>
-  </button>
+
 
 </div>

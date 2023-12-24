@@ -23,12 +23,6 @@ export class DashboardService {
     });
   }
 
-  deletePlayer$(name: string) {
-    return this.http.post<any>(`/dashboard/delete-player`, {
-      name: name.trim()
-    });
-  }
-
   addLottery$(lottery: string, playerName: string) {
     return this.http.post<any>(`/dashboard/add-lottery`, {
       lottery: lottery,
