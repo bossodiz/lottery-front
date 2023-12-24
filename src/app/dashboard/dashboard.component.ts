@@ -169,22 +169,23 @@ export class DashboardComponent implements OnInit {
       this.myChart.update();
   }
   async registerPlayerOnClick() {
-    const responsePlayer = await lastValueFrom(this._service.addPlayer$(this.name));
-    if (responsePlayer.code == 0) {
+    const response = await lastValueFrom(this._service.addPlayer$(this.name));
+    if (response.code == 0) {
       this.name = ''
-      this.playerList = responsePlayer.data.lotteryPlayer;
+      this.playerList = response.data.lotteryPlayer;
       this.alertMessage = 'Register Player ' + this.name + ' is successful!';
       this.showAlert();
       this.loadChart();
       this.loadPlayers();
     } else {
-      this.alertMessage = 'Register Player ' + this.name + ' is failed!';
+      this.alertMessage = response.error;
       this.showAlert();
+      return;
     }
   }
   showAlert() {
     const config = new MatSnackBarConfig();
-    config.duration = 3000;
+    config.duration = 100000;
     config.horizontalPosition = 'center';
     config.verticalPosition = 'bottom';
     const alertBar = this._snackBar.open(this.alertMessage, 'Close', config);
@@ -192,8 +193,5 @@ export class DashboardComponent implements OnInit {
       alertBar.dismiss();
     });
   }
-
-
-
 }
 
